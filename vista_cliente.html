@@ -5,51 +5,55 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Vista Cliente</title>
+   <!-- Implementing the modern opinionated html-style system -->
+   <link rel="stylesheet" href="assets/css/html_style_base.css">
+   <!-- Legacy styles included for specific layout fallbacks, but overridden by base.css -->
    <link rel="stylesheet" href="assets/css/vista_cliente.css">
    <link rel="icon" type="image/png" href="assets/images/VMS.png" sizes="32x32">
 </head>
 
-<body>
+<body class="dark"> <!-- Example: Applying dark theme as recommended for modern e-commerce displays -->
    <header>
       <div class="horizontal-menu">
-         <h2 id="title">Bienvenido | Angel (session storage)</h2>
-         <ul class="horizontal-list">
-            <li><img src="assets/images/perfilicon.png" alt="Editar" class="list-icon">
-               <a href="actualizar_datos.html">Actualizar Datos</a>
-            </li>
-            <li><img src="assets/images/note.png" alt="Historial" class="list-icon">
-               <a href="historial.html">Historial</a>
-            </li>
-            <li><img src="assets/images/grafica.png" alt="Grafica" class="list-icon">
-               <a href="graficas.html">Graficas</a>
-            </li>
-            <li><img src="assets/images/cerrar.png" alt="CerrarS" class="list-icon">
-               <a href="#" onclick="cerrar_sesion()">Cerrar Sesión</a>
-            </li>
-         </ul>
+         <h1 id="title">Bienvenido | Angel (session storage)</h1>
+         <div class="actions" style="justify-content: center; margin-bottom: 20px;">
+            <a href="actualizar_datos.html" class="btn">Actualizar Datos</a>
+            <a href="historial.html" class="btn">Historial</a>
+            <a href="graficas.html" class="btn">Graficas</a>
+            <a href="#" onclick="cerrar_sesion()" class="btn"
+               style="border-color: var(--error-accent); color: var(--error-accent);">Cerrar Sesión</a>
+         </div>
       </div>
    </header>
 
    <main>
-      <h3>Productos Disponibles</h3>
-      <form method="POST"> <!--action="procesar_compra.php"-->
-         <div class="producto-lista">
+      <div class="section-header">🛍️ Productos Disponibles</div>
 
+      <!-- Adding status indicators as requested by html-style -->
+      <p class="fallback"><span class="status-success">✓ Conectado</span> Listo para comprar.</p>
+
+      <form method="POST">
+         <div class="producto-lista">
+            <!-- Products will be generated dynamically here, ensure JS outputs .btn and .card styles -->
          </div>
 
-         <button type="button" class="btn_comprar" id="btn-compra">Comprar</button>
-         <button type="button" class="btn_comprar" id="btn-paypal">Comprar con Paypal</button>
-         <!-- <div id="paypal-button-container"></div> -->
-
+         <div class="actions" style="margin-top: 24px; justify-content: center;">
+            <button type="button" class="btn" id="btn-compra"
+               style="background: var(--info-accent); color: white; border-color: var(--info-accent);">Comprar
+               Ahora</button>
+            <button type="button" class="btn" id="btn-paypal"
+               style="background: #ffc439; color: #111; border-color: #ffc439;">PayPal checkout</button>
+         </div>
       </form>
 
    </main>
 
-</body>
+   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+   <script
+      src="https://www.paypal.com/sdk/js?client-id=AYlYNaZUo1E3XGzCN5yM0ZjOqWRC4d0cZdEiuTxv361V-Ks00ezEbCjNTkawjTyP9W6laPt0QMgDRMqB&currency=MXN"></script>
+   <script src="scripts/acceso.js"></script>
+   <script src="scripts/vista_cliente.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=AYlYNaZUo1E3XGzCN5yM0ZjOqWRC4d0cZdEiuTxv361V-Ks00ezEbCjNTkawjTyP9W6laPt0QMgDRMqB&currency=MXN"></script>
-<script src="scripts/acceso.js"></script>
-<script src="scripts/vista_cliente.js"></script>
+</body>
 
 </html>

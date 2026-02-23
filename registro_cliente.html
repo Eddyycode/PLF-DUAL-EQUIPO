@@ -1,38 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar</title>
     <link rel="icon" type="image/png" href="assets/images/VMS.png" sizes="32x32">
+    <!-- Modern opinionated html-style system -->
+    <link rel="stylesheet" href="assets/css/html_style_base.css">
     <link rel="stylesheet" href="assets/css/registro_cliente.css">
 </head>
-<body onload="solo_admin();">
+
+<body onload="solo_admin();" class="dark">
+
     <header>
-        <div class="horizontal-menu">
-            <button class="btn-volver" onclick="window.location.href='vista.html'">Volver</button>
-            <h2 class="titulo-centro">Registrar Cliente</h2>
+        <div class="actions" style="margin-bottom: 20px;">
+            <button class="btn" onclick="window.location.href='vista.html'"
+                style="background: var(--info-bg); color: var(--info-text); border-color: var(--info-accent);">←
+                Volver</button>
         </div>
+        <div class="section-header">👤 Registrar Cliente</div>
     </header>
 
-    <form method="post">
-        <label>Nombre:</label>
-        <input type="text" name="nombre" id="rg-nombre" placeholder="Ingrese un nombre" required><br>
+    <main style="max-width: 500px; margin: 0 auto;">
+        <div class="card-info" style="background: #1a1a1a; border: 1px solid #333;">
+            <form method="post">
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Nombre:</label>
+                    <input type="text" name="nombre" id="rg-nombre" placeholder="Ingrese un nombre" required
+                        style="width: 100%; padding: 8px; border-radius: var(--radius-sm); border: 1px solid #333; background: #222; color: #fff;">
+                </div>
 
-        <label>Contraseña:</label>
-        <input type="password" name="contrasenia" id="rg-contraseña" placeholder="Ingrese una contraseña" required><br>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Contraseña:</label>
+                    <input type="password" name="contrasenia" id="rg-contraseña" placeholder="Ingrese una contraseña"
+                        required
+                        style="width: 100%; padding: 8px; border-radius: var(--radius-sm); border: 1px solid #333; background: #222; color: #fff;">
+                </div>
 
-        <label>Correo:</label>
-        <input type="email" name="correo" id="rg-correo" placeholder="Ingrese un correo" required><br>
-        <span id="mensaje-success" style="display: none; color:rgba(15, 173, 17, 0.759);"></span>
-        <span id="mensaje-danger" style="display: none; color:rgba(255, 0, 0, 0.759);"></span><br>
-        <button type="button" value="Registrar Cliente" onclick="registrar_usuario()">Registrar</button>
-    </form>
-</body>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Correo:</label>
+                    <input type="email" name="correo" id="rg-correo" placeholder="Ingrese un correo" required
+                        style="width: 100%; padding: 8px; border-radius: var(--radius-sm); border: 1px solid #333; background: #222; color: #fff;">
+                </div>
+
+                <div style="margin-bottom: 16px; min-height: 20px;">
+                    <span id="mensaje-success" class="fallback"
+                        style="display: none; color: var(--success-accent); font-weight: bold;"></span>
+                    <span id="mensaje-danger" class="fallback"
+                        style="display: none; color: var(--error-accent); font-weight: bold;"></span>
+                </div>
+
+                <button type="button" class="btn" value="Registrar Cliente" onclick="registrar_usuario()"
+                    style="width: 100%; background: var(--info-accent); color: white; border: none; padding: 10px;">Registrar</button>
+            </form>
+        </div>
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="scripts/acceso.js"></script>
     <script src="scripts/registrar_cliente.js"></script>
 
-</html>
+</body>
 
+</html>

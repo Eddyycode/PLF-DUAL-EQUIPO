@@ -1,28 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
+    <!-- Modern opinionated html-style system -->
+    <link rel="stylesheet" href="assets/css/html_style_base.css">
     <link rel="stylesheet" href="assets/css/login.css">
     <link rel="icon" type="image/png" href="assets/images/VMS.png" sizes="32x32">
 </head>
-<body>
-    <form>
-        <h2>Iniciar Sesión</h2>
-        <label>Usuario:</label>
-        <input type="text" name="nombre" id="lg-nombre" placeholder="Ingrese su nombre de usuario" required><br>
-        <label>Contraseña:</label>
-        <input type="password" name="contrasenia" id="lg-contraseña" placeholder="Ingrese su contraseña" required><br>
-        <span id="mensaje-error" style="display: none; color:rgba(255, 0, 0, 0.759);"></span>
-        <button type="button" value="Iniciar sesión" onclick="iniciar_sesion()">Iniciar sesión</button>
-    </form>
 
-    <a href="recuperar.html">¿Se te olvidó tu contraseña?</a>
+<body class="dark">
+    <main style="max-width: 400px; margin: 80px auto;">
+        <div class="card-info"
+            style="background: var(--info-bg); border: 1px solid var(--info-accent); color: var(--info-text);">
+            <h2 style="margin-top: 0; color: var(--info-text); border-bottom: none;">¡Bienvenido de vuelta!</h2>
+            <form>
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Usuario:</label>
+                    <input type="text" name="nombre" id="lg-nombre" placeholder="Ingrese su nombre de usuario" required
+                        style="width: 100%; padding: 8px; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 4px;">Contraseña:</label>
+                    <input type="password" name="contrasenia" id="lg-contraseña" placeholder="Ingrese su contraseña"
+                        required
+                        style="width: 100%; padding: 8px; border-radius: var(--radius-sm); border: 1px solid #ccc;">
+                </div>
+                <span id="mensaje-error" class="fallback"
+                    style="display: none; color: var(--error-accent); font-weight: bold; margin-bottom: 12px;"></span>
+                <button type="button" class="btn" value="Iniciar sesión" onclick="iniciar_sesion()"
+                    style="width: 100%; background: var(--info-accent); color: white; border: none; padding: 10px;">Iniciar
+                    sesión</button>
+            </form>
+        </div>
+
+        <div style="text-align: center; margin-top: 16px;">
+            <a href="recuperar.html" class="pill" style="color: var(--info-accent);">¿Se te olvidó tu contraseña?</a>
+            <br><br>
+            <a href="registro_cliente.html" class="pill" style="color: #666;">¿No tienes cuenta? Regístrate</a>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="scripts/login.js"></script>
+
 </body>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- <script src="scripts/acceso.js"></script> -->
-<script src="scripts/login.js"></script>
 
 </html>

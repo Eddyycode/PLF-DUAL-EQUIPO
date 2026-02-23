@@ -1,38 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial</title>
+    <!-- Modern opinionated html-style system -->
+    <link rel="stylesheet" href="assets/css/html_style_base.css">
     <link rel="stylesheet" href="assets/css/historial.css">
     <link rel="icon" type="image/png" href="assets/images/VMS.png" sizes="32x32">
 </head>
-<body onload="solo_user(); consultar_historial()">
+
+<body onload="solo_user(); consultar_historial()" class="dark">
 
     <header>
-        <div class="horizontal-menu">
-            <button class="btn-volver" onclick="window.location.href='vista_cliente.html'">Volver</button>
-            <h2 class="titulo-centro">Historial de Compras</h2>
+        <div class="actions" style="margin-bottom: 20px;">
+            <button class="btn" onclick="window.location.href='vista_cliente.html'"
+                style="background: var(--info-bg); color: var(--info-text); border-color: var(--info-accent);">←
+                Volver</button>
         </div>
+        <div class="section-header">📜 Historial de Compras</div>
     </header>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Producto</th>
-                <th>Opción (ID)</th>
-                <th>Precio</th>
-           </tr>
-        </thead>
-        <tbody id="tbl-hist"></tbody>
-        <tfoot></tfoot>
-    </table>
-</body>
+    <main>
+        <table class="table-styled">
+            <thead>
+                <tr>
+                    <th class="sortable">Fecha <a>▼</a></th>
+                    <th>Hora</th>
+                    <th>Producto</th>
+                    <th>Opción (ID)</th>
+                    <th class="sortable">Precio <a>▼</a></th>
+                </tr>
+            </thead>
+            <!-- Ensure scripts/historial.js output contains .highlight/.positive classes where applicable -->
+            <tbody id="tbl-hist"></tbody>
+            <tfoot></tfoot>
+        </table>
+    </main>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="scripts/acceso.js"></script>
     <script src="scripts/historial.js"></script>
+
+</body>
 
 </html>

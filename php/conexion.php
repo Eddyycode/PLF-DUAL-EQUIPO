@@ -3,13 +3,15 @@
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
-    $user = "root";
-    $pass = "78910";
-    $server = "localhost";
-    $db = "plf";
+    // Parsing generic Environment Variables (e.g. from Railway or Docker)
+    $server = getenv("MYSQLHOST") ?: "127.0.0.1";
+    $user = getenv("MYSQLUSER") ?: "root";
+    $pass = getenv("MYSQLPASSWORD") !== false ? getenv("MYSQLPASSWORD") : "78910";
+    $db = getenv("MYSQLDATABASE") ?: "plf";
+    $port = getenv("MYSQLPORT") ?: "3306";
 
     // Establishing the database connection
-    $con = mysqli_connect($server, $user, $pass, $db);
+    $con = mysqli_connect($server, $user, $pass, $db, $port);
     mysqli_set_charset($con, "utf8mb4"); // utf8mb4 is safer for modern apps (emojis, etc)
 }
 catch (mysqli_sql_exception $e) {

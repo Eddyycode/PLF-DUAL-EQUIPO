@@ -1,40 +1,99 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');    /* Especificamos que se utulizara html con utf8 */
-date_default_timezone_set('America/Mexico_City');    /* Especificamos la zona horaria */
+// Rule: Mandatory Debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-$clientejson = json_decode($_POST['trama']);           //* Variable importante, trae los datos en formato JSON para hacer las consultas sql y lo vuelve un objeto de php
-$respuesta_servidor = new stdClass();
-if ($clientejson->accion == 0) {
-    $respuesta_servidor->resultado = crear_compra($clientejson);
+// Rule: AJAX Consistency
+header('Content-Type: application/json; charset=UTF-8');
+date_default_timezone_set('America/Mexico_City');
+
+$response = [
+    'status' => 'error',
+    'message' => 'Unknown error occurred.',
+    'data' => null
+];
+
+if (!isset($_POST['trama'])) {
+    $response['message'] = 'Missing data payload (trama).';
+    echo json_encode($response);
+    exit;
 }
 
-print(json_encode($respuesta_servidor)); //!si lo quitas truena la app!!! (Básicamente returna un json del resultado de la consulta y si lo quitas truena)
+$requestData = json_decode($_POST['trama']);
 
-function crear_compra($valores)
+if ($requestData === null) {
+    $response['message'] = 'Invalid JSON format received.';
+    echo json_encode($response);
+    exit;
+}
+
+try {
+    if (isset($requestData->accion) && $requestData->accion == 0) {
+        $result = processPurchase($requestData);
+        if ($result['success']) {
+            $response['status'] = 'success';
+            $response['message'] = $result['message'];
+        }
+        else {
+            $response['message'] = $result['message'];
+        }
+    }
+    else {
+        $response['message'] = 'Invalid action specified.';
+    }
+}
+catch (Exception $e) {
+    // Rule: No Silent Errors
+    $response['message'] = 'Server error: ' . $e->getMessage();
+}
+
+echo json_encode($response);
+exit;
+
+// ------------------------------------------------------------------
+// Helper Functions (Rule: Single Responsibility)
+// ------------------------------------------------------------------
+
+/**
+ * Creates purchase records based on the JSON payload.
+ */
+function processPurchase($data)
 {
     include("../conexion.php");
 
-    $fecha = date('Y-m-d H:i:s'); // Fecha actual
-    $productos = $valores->productos; // Array de productos
-    $usuario_id = $valores->usuario_id;
+    $date = date('Y-m-d H:i:s');
+
+    // Rule: Data Type Validation
+    if (!isset($data->productos) || !is_array($data->productos) || !isset($data->usuario_id)) {
+        throw new Exception("Malformed product list or missing user ID in payload.");
+    }
+
+    $products = $data->productos;
+    $userId = intval($data->usuario_id);
 
     $sql = "INSERT INTO venta (fecha, usuario_id, producto_id) VALUES (?, ?, ?)";
     $stmt = $con->prepare($sql);
 
-    $todo_ok = true;
-    foreach ($productos as $producto_id) {
-        $stmt->bind_param("sii", $fecha, $usuario_id, $producto_id);
+    if (!$stmt) {
+        throw new Exception("Failed to prepare sales query.");
+    }
+
+    $allSuccessful = true;
+    foreach ($products as $productId) {
+        $cleanProductId = intval($productId);
+        $stmt->bind_param("sii", $date, $userId, $cleanProductId);
         if (!$stmt->execute()) {
-            $todo_ok = false;
+            $allSuccessful = false;
             break;
         }
     }
     $stmt->close();
 
-    if ($todo_ok) {
-        return ['success' => true, 'message' => 'Compra registrada correctamente'];
-    } else {
-        return ['success' => false, 'message' => 'Error al registrar la compra'];
+    if ($allSuccessful) {
+        return ['success' => true, 'message' => 'Purchase registered successfully.'];
+    }
+    else {
+        return ['success' => false, 'message' => 'Error registering one or more items.'];
     }
 }
 ?>

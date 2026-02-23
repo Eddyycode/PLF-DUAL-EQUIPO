@@ -1,18 +1,67 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');    /* Especificamos que se utulizara html con utf8 */
-date_default_timezone_set('America/Mexico_City');    /* Especificamos la zona horaria */
-$clientejson = json_decode($_POST['trama']);           //* Variable importante, trae los datos en formato JSON para hacer las consultas sql y lo vuelve un objeto de php
-$respuesta_servidor = new stdClass();
+// Active error reporting during development
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-if ($clientejson->accion == 0) {
-    $respuesta_servidor->resultadpo = name($clientejson);
+// Standardize header output to JSON
+header('Content-Type: application/json; charset=UTF-8');
+date_default_timezone_set('America/Mexico_City');
+
+// Base response structure for AJAX consistency
+$response = [
+    'status' => 'error',
+    'message' => 'Unknown error occurred.',
+    'data' => null
+];
+
+// Payload validation to prevent silent failures
+if (!isset($_POST['trama'])) {
+    $response['message'] = 'Missing data payload (trama).';
+    echo json_encode($response);
+    exit;
 }
 
-print(json_encode($respuesta_servidor)); //!si lo quitas truena la app!!! (Básicamente returna un json del resultado de la consulta y si lo quitas truena)
+$requestData = json_decode($_POST['trama']);
 
+if ($requestData === null) {
+    $response['message'] = 'Invalid JSON format received.';
+    echo json_encode($response);
+    exit;
+}
 
-function name () {
+try {
+    if (isset($requestData->accion) && $requestData->accion == 0) {
+        $response['status'] = 'success';
+        $response['message'] = 'Action successfully processed.';
+        // Descriptive function name revealing intent
+        $response['data'] = ['resultado' => processInitialAction($requestData)];
+    }
+    else {
+        $response['message'] = 'Invalid action specified.';
+    }
+}
+catch (Exception $e) {
+    // Ensuring no silent errors
+    $response['message'] = 'Server error: ' . $e->getMessage();
+}
 
+// Consistent JSON Output
+echo json_encode($response);
+exit;
+
+// ----------------------------------------------------
+// Helper Functions 
+// ----------------------------------------------------
+
+/**
+ * Processes the initial action triggered by the ESP32.
+ * @param object $data The decoded JSON payload sent by the client.
+ * @return string
+ */
+function processInitialAction($data)
+{
+    // Specific logic for action 0
+    return "Action 0 processed";
 }
 
 ?>

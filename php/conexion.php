@@ -1,9 +1,25 @@
-<?php 
-    $user="root"; /* usuario con el cual se accederá a la bd, en este caso se accedera con el usuario root */
-    $pass="78910"; /*contraseña del usuario */
-    $server="localhost";  /*localización del servidor, ahi puede ir también la ip del dispositivo que aloja la bd */
-    $db="plf";   /* bd a la cual se quiere acceder*/
-    $con= mysqli_connect($server,$user,$pass) or die("Error al conectar");      /* variable para hacer la conección contiene el servidor, el usuario y su contraseña*/
-    mysqli_select_db($con,$db);     /* función que accede a la bd, como parametros recibe la conexión y la variable*/
-    mysqli_set_charset($con,"utf8");     /* se especifica que la bd utiliza utf8*/
+<?php
+// Mandatory Debugging: Enable strict error reporting for mysqli to throw exceptions
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+try {
+    $user = "root";
+    $pass = "78910";
+    $server = "localhost";
+    $db = "plf";
+
+    // Establishing the database connection
+    $con = mysqli_connect($server, $user, $pass, $db);
+    mysqli_set_charset($con, "utf8mb4"); // utf8mb4 is safer for modern apps (emojis, etc)
+}
+catch (mysqli_sql_exception $e) {
+    // If this file is included in an API context, we should return a generic JSON error
+    // instead of a raw text error or HTML crash.
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Database connection failed. Please try again later.'
+    ]);
+    exit;
+}
 ?>

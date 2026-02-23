@@ -131,27 +131,18 @@ function registerUser($data)
 
     // 2. Insert new user securely (Prepared Statement)
     $hashedPassword = password_hash($data->contraseña, PASSWORD_BCRYPT);
-    $insertSql = "INSERT INTO usuario (nombre, correo, contrasenia, registro) VALUES (?, ?, ?, ?)";
 
-    // Note: It seems the original code passed matricula inside contrasenia's place or viceversa, 
-    // adapting to match the DB columns: nombre, correo, contrasenia, registro.
-    // Ensure data object contains correct fields. If 'matricula' is a DB field, insert it properly.
-    // The original code passed: '$valores->nombre', '$valores->correo', '$valores->matricula' instead of password! 
-    // This looks like a bug in original code, fixing it to map standard structure based on your original insert.
-    // Assuming original intent based on values passed (nombre, correo, contrasenia, registro). The original code had 5 values:
-    // INSERT INTO usuario(nombre,correo,contrasenia,registro) VALUES ('$valores->nombre','$valores->correo','$valores->matricula','$hashed_contraseña','$registro')
-    // Wait, original has 4 columns: nombre,correo,contrasenia,registro but passed 5 values!
-    // Let's look at the database schema. Based on plf.sql, `usuario` has: (id, nombre, contrasenia, matricula, correo, tipo, registro, estatus).
-    // Let's bind them correctly.
-
-    $insertSql = "INSERT INTO usuario (nombre, correo, matricula, contrasenia, registro) VALUES (?, ?, ?, ?, ?)";
+    // The real database schema for `usuario` based on plf.sql is: id, nombre, correo, contrasenia, registro, rol.
+    // Defaulting role to 'user' for public registration.
+    $rol = 'user';
+    $insertSql = "INSERT INTO usuario (nombre, correo, contrasenia, registro, rol) VALUES (?, ?, ?, ?, ?)";
     $insertStmt = $con->prepare($insertSql);
 
     if (!$insertStmt) {
-        throw new Exception("Failed to prepare insertion statement.");
+        throw new Exception("Failed to prepare insertion statement: " . $con->error);
     }
 
-    $insertStmt->bind_param("sssss", $data->nombre, $data->correo, $data->matricula, $hashedPassword, $registrationDate);
+    $insertStmt->bind_param("sssss", $data->nombre, $data->correo, $hashedPassword, $registrationDate, $rol);
     $success = $insertStmt->execute();
     $insertStmt->close();
 

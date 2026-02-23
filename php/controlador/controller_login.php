@@ -77,7 +77,7 @@ exit;
  */
 function processLogin($data)
 {
-    include("conexion.php");
+    require_once("../conexion.php");
 
     // Rule: SQL Integrity via Prepared Statements
     // Validated against plf.sql, 'matricula' does not exist. We fetch 'id' and 'rol' instead.
@@ -117,7 +117,7 @@ function processLogin($data)
  */
 function registerUser($data)
 {
-    include("conexion.php");
+    require_once("../conexion.php");
     $registrationDate = date("Y-m-d H:i:s");
 
     // 1. Verify if the username already exists (Prepared Statement)

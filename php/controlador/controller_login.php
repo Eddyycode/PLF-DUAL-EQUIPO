@@ -80,7 +80,8 @@ function processLogin($data)
     include("conexion.php");
 
     // Rule: SQL Integrity via Prepared Statements
-    $sql = "SELECT matricula, nombre, correo, contrasenia FROM usuario WHERE nombre = ?";
+    // Validated against plf.sql, 'matricula' does not exist. We fetch 'id' and 'rol' instead.
+    $sql = "SELECT id, nombre, correo, contrasenia, rol FROM usuario WHERE nombre = ?";
     $stmt = $con->prepare($sql);
 
     if (!$stmt) {
@@ -101,7 +102,11 @@ function processLogin($data)
     $stmt->close();
 
     if (password_verify($data->contraseña, $user['contrasenia'])) {
-        return [$user['matricula'], $user['nombre'], $user['correo']];
+        // Return structured data for the frontend mapping. [id, nombre, correo, rol]
+        // Note: Javascript legacy code expects the role at index 4 if sent as an array. 
+        // For backwards compatibility with login.js mapping: `res.resultado[4]`, we can return specific indexes, 
+        // but since we updated it to JSON, returning a standard mapped array works better:
+        return [$user['id'], $user['nombre'], $user['correo'], 'dummy_index', $user['rol']];
     }
 
     return false;

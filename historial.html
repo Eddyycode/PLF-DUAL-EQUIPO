@@ -11,18 +11,19 @@
     <link rel="icon" type="image/png" href="assets/images/VMS.png" sizes="32x32">
 </head>
 
-<body onload="solo_user(); consultar_historial()" class="dark">
+<body onload="solo_user(); consultar_historial()" style="text-align: center; background-color: #f4f6f8;">
 
     <header>
-        <div class="actions" style="margin-bottom: 20px;">
+        <div class="actions" style="margin-bottom: 20px; justify-content: center;">
             <button class="btn" onclick="window.location.href='vista_cliente.html'"
                 style="background: var(--info-bg); color: var(--info-text); border-color: var(--info-accent);">←
                 Volver</button>
         </div>
-        <div class="section-header">📜 Historial de Compras</div>
+        <div class="section-header" style="text-align: center;">📜 Historial de Compras</div>
     </header>
 
-    <main>
+    <main
+        style="max-width: 800px; margin: 40px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
         <table class="table-styled">
             <thead>
                 <tr>
